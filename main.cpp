@@ -102,17 +102,19 @@ int set_array(short int *a)
     }
     return n-1;
 }
-
-void jam_sub(short int *a,int na, short int *b, int nb)
+short int *jam_array(short int *a,int na, short int *b, int nb)
 {
-    short int c[maxadad];
+    short int *c;
+    c = new short int[maxadad];
     bool flag;
+
     if (nb > na)
     {
         swap (a,b);
         swap (na,nb);
     }
     int d = na-nb;
+
     for (int i=1; i<=na+1;i++)
         c[i] = 0;
 
@@ -133,8 +135,51 @@ void jam_sub(short int *a,int na, short int *b, int nb)
         if (sum/10)
         flag = false;
     }
-    cout << "\nResult =";
     if (flag)
+    {
+        c[0] = 1;
+    }
+    else
+    {
+        c[0] = 0;
+    }
+    return c;
+}
+short int *zarb_array(short int *a,int na, int b,int j)
+{
+    short int *c;
+    c = new short int[maxadad];
+
+    for (int i=1; i<=maxadad;i++)
+        c[i] = -1;
+
+    for (int i = na ; i>=1; i--)
+    {
+        int zarb;
+        c[i] = (c[i]==-1)?0:c[i];
+        c[i+1] = (c[i+1]==-1)?0:c[i+1];
+        zarb = a[i] * b + c[i+1];
+        c[i+1] = zarb % 10;
+        c[i] = zarb / 10;
+    }
+    c[0] = na+1;
+    for (int i =0 ; i<j ; i++)
+    {
+        c[na+i+2] = 0;
+        c[0]++;
+    }
+    return c;
+}
+
+void jam_sub(short int *a,int na, short int *b, int nb)
+{
+    short int *c;
+    bool flag;
+
+    c = jam_array(a,na,b,nb);
+
+    cout << "\nResult =";
+    if (c[0])
     {
         if (a[0] == -3)
             cout << "-";
@@ -149,6 +194,7 @@ void jam_sub(short int *a,int na, short int *b, int nb)
             cout << c[i];
     }
 }
+
 void tafrigh_sub(short int *a,int na, short int *b, int nb)
 {
     bool manfi=false;
@@ -221,7 +267,33 @@ void tafrigh_sub(short int *a,int na, short int *b, int nb)
 }
 void zarb_sub(short int *a,int na, short int *b, int nb)
 {
+    int m;
+    if (nb > na)
+    {
+        swap (a,b);
+        swap (na,nb);
+    }
 
+    short int *c [200];
+    for (int i=0;i<2;i++)
+        c[i] = new short int[maxadad];
+
+    for (int i=0; i<nb; i++)
+    {
+       c[i] = zarb_array(a,na,b[nb-i],i);
+    }
+    for ( m=0; m<nb; m++)
+    {
+        c[m+1] = jam_array(c[m],c[m][0],c[m+1],c[m+1][0]);
+    }
+    for (int j = 1;j<=maxadad;j++)
+    {
+        cout<< "OK0;";
+        if (c[m+1][j] != -1)
+        {
+            cout << c[m+1][j];
+        }
+    }
 }
 int main()
 {
@@ -230,6 +302,6 @@ int main()
    n[0] = set_array(a);
    cout << endl;
    n[1] = set_array(b);
-   jam_sub(a,n[0],b,n[1]);
+   zarb_sub(a,n[0],b,n[1]);
     return 0;
 }
