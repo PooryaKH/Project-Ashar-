@@ -145,6 +145,43 @@ short int *jam_array(short int *a,int na, short int *b, int nb)
     }
     return c;
 }
+short int *jam_zarb_array(short int *a,int na, short int *b, int nb)
+{
+    short int *c;
+    c = new short int[maxadad];
+    bool flag;
+
+    if (nb > na)
+    {
+        swap (a,b);
+        swap (na,nb);
+    }
+    int d = na-nb;
+
+    for (int i=1; i<=na+1;i++)
+        c[i] = 0;
+
+    for (int i = na ; i>0 ; i--)
+    {
+        int sum;
+        flag = true;
+        if (i > d)
+        {
+            sum = a[i] + b[i-d] + c[i+1];
+        }
+        else
+        {
+            sum = a[i] + c[i+1];
+        }
+        c[i+1] = sum % 10;
+        c[i] = sum / 10;
+        if (sum/10)
+        flag = false;
+    }
+    c[0] = na;// size
+
+    return c;
+}
 short int *zarb_array(short int *a,int na, int b,int j)
 {
     short int *c;
@@ -274,26 +311,32 @@ void zarb_sub(short int *a,int na, short int *b, int nb)
         swap (na,nb);
     }
 
-    short int *c [200];
-    for (int i=0;i<2;i++)
-        c[i] = new short int[maxadad];
+    short int *c;
+    c = new short int[maxadad];
+
+    short int *sum;
+    sum = new short int[maxadad];
+
+    for (int i=0; i<maxadad; i++)
+        sum[i] = 0;
 
     for (int i=0; i<nb; i++)
     {
-       c[i] = zarb_array(a,na,b[nb-i],i);
+       c = zarb_array(a,na,b[nb-i],i);
+       sum = jam_zarb_array(c,c[0],sum,c[0]);
     }
-    for ( m=0; m<nb; m++)
-    {
-        c[m+1] = jam_array(c[m],c[m][0],c[m+1],c[m+1][0]);
-    }
-    for (int j = 1;j<=maxadad;j++)
-    {
-        cout<< "OK0;";
-        if (c[m+1][j] != -1)
-        {
-            cout << c[m+1][j];
-        }
-    }
+    int sizef = sum[0];
+    int k;
+
+    for ( k = 1; k <= sizef+1 ; k++)
+        if (sum[k] != 0)
+            break;
+
+    cout << endl;
+    if (k > sizef+1)
+        cout << "0";
+    for (int i = k;i<=sizef+1 ; i++)
+        cout << sum[i];
 }
 int main()
 {
