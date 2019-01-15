@@ -1,8 +1,53 @@
 #include <iostream>
 #include <conio.h>
+#include <math.h>
 #define maxadad 201
 using namespace std;
+void rzero(short int *a)
+{
+    int na = a[0];
+    for(int i=1;i<na;i++)
+    {
+        if (a[1] == 0)
+                a[0]--;
 
+        for(int j=1; j<na; j++)
+        {
+            if (a[j]!=0)
+            {
+                break;
+            }
+            else
+            {
+                swap(a[j],a[j+1]);
+            }
+        }
+    }
+    if (a[0] < 1)
+    {
+        a[0] = 1;
+        a[1] = 0;
+    }
+
+}
+int zeroes(short int *a)
+{
+    int na=0;
+    for(int i=1;i<=a[0];i++)
+    {
+        if (a[i] != 0)
+            break;
+
+        na++;
+    }
+    return na;
+
+}
+void addzero(short int *a)
+{
+    a[a[0]+1] = 0;
+    a[0]++;
+}
 int set_array(short int *a)
 {
    char c;
@@ -189,7 +234,12 @@ short int *zarb_array(short int *a,int na, int b,int j)
 
     for (int i=1; i<=maxadad;i++)
         c[i] = -1;
-
+    c[0] = na+1;
+    for (int i =0 ; i<j ; i++)
+    {
+        c[na+i+2] = 0;
+        c[0]++;
+    }
     for (int i = na ; i>=1; i--)
     {
         int zarb;
@@ -199,12 +249,8 @@ short int *zarb_array(short int *a,int na, int b,int j)
         c[i+1] = zarb % 10;
         c[i] = zarb / 10;
     }
-    c[0] = na+1;
-    for (int i =0 ; i<j ; i++)
-    {
-        c[na+i+2] = 0;
-        c[0]++;
-    }
+
+    rzero(c);
     return c;
 }
 
@@ -232,9 +278,12 @@ void jam_sub(short int *a,int na, short int *b, int nb)
     }
 }
 
-void tafrigh_sub(short int *a,int na, short int *b, int nb)
+short int *tafrigh_sub(short int *a,int na, short int *b, int nb)
 {
     bool manfi=false;
+
+    short int *c;
+    c = new short int [maxadad];
 
     if (a[0] == -3)
         manfi = true;
@@ -247,6 +296,7 @@ void tafrigh_sub(short int *a,int na, short int *b, int nb)
     }
     if (nb == na)
         for (int i=1;i<=na;i++)
+        {
             if (b[i] > a[i])
             {
                     swap (a,b);
@@ -254,14 +304,24 @@ void tafrigh_sub(short int *a,int na, short int *b, int nb)
                     manfi = !manfi;
                     break;
             }
+            if (a[i] > b[i])
+            {
+                break;
+            }
+        }
     int d = na - nb; // d = tafazel tedad argham.
 
     for ( int i=nb; i>0; i--)
     {
         int p = i + d;  // p = shomarande a.
         int kam = a[p] - b[i];
+        if (b[i] == 0)
+            continue;
+
         if (kam >= 0)
+        {
             a[p] = kam;
+        }
         else
         {
             a[p] = kam + 10;
@@ -278,31 +338,18 @@ void tafrigh_sub(short int *a,int na, short int *b, int nb)
                 }
             }
         }
-
     }
-    cout << "\nResult = ";
-    int m;
-    if (manfi)
-    {
-        cout << "-";
-        m=0;
-        while (++m)
-            if (a[m] != 0 || m == na)
-                break;
-        for (int i= m;i<=na;i++)
-        cout << a[i];
-    }
-    else
-    {
-        m=0;
-        while (++m)
-            if (a[m] != 0 || m == na)
-                break;
-        for (int i= m;i<=na;i++)
-        cout << a[i];
-    }
+        c[0] = na;
+     //   cout << "\nMinus Result: ";
+        for (int i= 1;i<=na;i++)
+            {
+                c[i] = a[i];
+    //            cout <<endl<< c[i];
+            }
+    //    cout << a[i];
+    return c;
 }
-void zarb_sub(short int *a,int na, short int *b, int nb)
+short int *zarb_sub(short int *a,int na, short int *b, int nb)
 {
     int m;
     if (nb > na)
@@ -325,18 +372,170 @@ void zarb_sub(short int *a,int na, short int *b, int nb)
        c = zarb_array(a,na,b[nb-i],i);
        sum = jam_zarb_array(c,c[0],sum,c[0]);
     }
-    int sizef = sum[0];
+    int sizef = sum[0]+1;
     int k;
 
-    for ( k = 1; k <= sizef+1 ; k++)
+    for ( k = 1; k <= sizef ; k++)
         if (sum[k] != 0)
             break;
 
+    //cout << endl;
+    //if (k > sizef)
+    //    cout << "0";
+    //for (int i = k;i<=sizef ; i++)
+    //    cout << sum[i];
+
+    c[0] = -1;
+    if (k > sizef)
+    {
+        c[1] = 0;
+        c[0] = 1;
+    }
+    for (int i = k;i<=sizef ; i++)
+    {
+        if (c[0] == -1 && c[i] != 0)
+        {
+            c[0] = 0;
+        }
+
+        if (c[0] != -1)
+        {
+          c[i] = sum[i];
+          c[0]++;
+        }
+    }
+    return c;
+}
+bool arr_comp(short int *a,int na, short int *b, int nb)
+{
+    if (na < nb)
+    {
+        return 0;
+    }
+    else if (na > nb)
+    {
+        return 1;
+    }
+
+    for(int i = 1; i <=na ;i++)
+        if (a[i] < b[i])
+        {
+            return 0;
+        }
+        else if (a[i] > b[i])
+        {
+            return 1;
+        }
+
+        return 0;
+}
+bool arr_comp_even(short int *a,int na, short int *b, int nb)
+{
+    if (na < nb)
+    {
+        return 0;
+    }
+    else if (na > nb)
+    {
+        return 1;
+    }
+
+    for(int i = 1; i <=na ;i++)
+        if (a[i] < b[i])
+        {
+            return 0;
+        }
+        else if (a[i] > b[i])
+        {
+            return 1;
+        }
+
+        return 1;
+}
+
+string taghsim_sub(short int *a,int na, short int *b, int nb)
+{
     cout << endl;
-    if (k > sizef+1)
-        cout << "0";
-    for (int i = k;i<=sizef+1 ; i++)
-        cout << sum[i];
+    int n1,n2,k;
+    string out = "";
+    short int *c;
+    c = new short int [maxadad];
+    short int *d;
+    d = new short int [maxadad];
+    short int *q;
+    q = new short int [maxadad];
+    int power,n=0,I = 1;
+
+if (arr_comp(a,na,b,nb))
+{
+        a[0] = na;
+    while (arr_comp_even(a,a[0],b,nb))
+    {
+
+        if (arr_comp_even(a,nb,b,nb))
+        {
+            for ( k =1; k<=nb; k++)
+            {
+                c[k] = a[k];
+            }
+        }
+        else
+        {
+            for ( k =1; k<=nb+1; k++)
+            {
+                c[k] = a[k];
+                if (I != 1)
+                {
+                   // q[I++] = 0;
+                }
+            }
+        }
+        c[0] = k-1;
+
+        for ( int i=2 ; i<=10 ; i++)
+        {
+            d = zarb_array(b,nb,i,0);
+
+            if (arr_comp(d,d[0],c,k-1))
+            {
+                d = zarb_array(b,nb,i-1,0);
+                power = a[0] - d[0];
+                for(int g=1; g<=power; g++)
+                {
+                    addzero(d);
+                }
+                if (arr_comp(d,d[0],a,a[0]))
+                    d[0]--;
+
+
+
+                q[I++] = i-1;
+
+                a = tafrigh_sub(a,a[0],d,d[0]);
+                n = zeroes(a);
+
+                for (int i=1; i< n-nb ; i++)
+                {
+
+                    q[I++] = 0;
+                }
+                rzero(a);
+                break;
+            }
+        }
+    }
+        cout << "\n\n";
+        for (int j=1; j<I; j++)
+            cout << q[j];
+
+
+        return out;
+    }
+    else
+    {
+        return "<1";
+    }
+
 }
 int main()
 {
@@ -345,6 +544,7 @@ int main()
    n[0] = set_array(a);
    cout << endl;
    n[1] = set_array(b);
-   zarb_sub(a,n[0],b,n[1]);
+   //tafrigh_sub(a,n[0],b,n[1])
+   cout << taghsim_sub(a,n[0],b,n[1]);
     return 0;
 }
