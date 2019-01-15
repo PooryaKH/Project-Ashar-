@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <conio.h>
 #include <stdlib.h>
@@ -10,6 +11,8 @@ void rzero(short int *a)
     {
         if (a[1] == 0)
                 a[0]--;
+
+
 
         for(int j=1; j<na; j++)
         {
@@ -216,7 +219,6 @@ short int *jam_array(short int *a,int na, short int *b, int nb)
 {
     short int *c;
     c = new short int[maxadad];
-    bool flag;
 
     if (nb > na)
     {
@@ -231,7 +233,6 @@ short int *jam_array(short int *a,int na, short int *b, int nb)
     for (int i = na ; i>0 ; i--)
     {
         int sum;
-        flag = true;
         if (i > d)
         {
             sum = a[i] + b[i-d] + c[i+1];
@@ -242,8 +243,6 @@ short int *jam_array(short int *a,int na, short int *b, int nb)
         }
         c[i+1] = sum % 10;
         c[i] = sum / 10;
-        if (sum/10)
-        flag = false;
     }
     c[0] = na + 1;
     rzero(c);
@@ -321,15 +320,6 @@ short int *jam_sub(short int *a,int na, short int *b, int nb) // niazi be in tab
 short int *tafrigh_sub(short int *a,int na, short int *b, int nb)
 {
 
-    short int *c;
-    c = new short int [maxadad];
-    //cout << "\nA = ";
-    //for (int i=1; i<=na;i++)
-    //    cout << a[i];
-    //cout << "\nB = ";
-    //for (int i=1; i<=nb;i++)
-    //    cout << b[i];
-
     if (nb > na)
     {
         swap (a,b);
@@ -378,16 +368,8 @@ short int *tafrigh_sub(short int *a,int na, short int *b, int nb)
             }
         }
     }
-    //rzero(a);
-
-//        cout << "\nMinus Result: ";
-        for (int i= 0;i<=a[0];i++)
-            {
-                c[i] = a[i];
-            }
-                //    cout << a[i];
-    rzero(c);
-    return c;
+    rzero(a);
+    return a;
 }
 short int *zarb_sub(short int *a,int na, short int *b, int nb)
 {
@@ -411,22 +393,8 @@ short int *zarb_sub(short int *a,int na, short int *b, int nb)
        c = zarb_array(a,na,b[nb-i],i);
        sum = jam_zarb_array(c,c[0],sum,c[0]);
     }
-
-    //for ( k = 1; k <= sizef ; k++)
-    //    if (sum[k] != 0)
-    //        break;
     rzero(sum);
-    //cout << endl;
-    //if (k > sizef)
-    //    cout << "0";
-    //for (int i = k;i<=sizef ; i++)
-    //    cout << sum[i];
 
-    //if (k > sizef)
-    //{
-     //   c[1] = 0;
-    //    c[0] = 1;
-    //}
 
     return sum;
 }
@@ -592,7 +560,7 @@ void jam(short int *a, int na, short int *b, int nb)
         a[0] = na;
         b[0] = nb;
         c = tafrigh_sub(b,nb,a,na);
-        if (arr_comp(b,nb,a,na))
+        if (arr_comp(a,na,b,nb))
             cout << "-";
     }
     else if ((a[0] != -3) && (b[0] == -3))
@@ -600,7 +568,7 @@ void jam(short int *a, int na, short int *b, int nb)
         a[0] = na;
         b[0] = nb;
         c = tafrigh_sub(a,na,b,nb);
-        if (arr_comp(a,na,b,nb))
+        if (arr_comp(b,nb,a,na))
             cout << "-";
     }
     else
@@ -756,9 +724,39 @@ int main()
    cout << "\n\n*Please , Select your desired operation:\n\n1.+    2.-    3.x    4./    5.^    6.Jazr\n\nTYPE: ";
    c = get_operation() - '0';
    system("cls");
+   cout << "1. ";
+   if (a[0] == -3)
+    cout << "-";
+   for(int i=1; i<=na; i++)
+    cout << a[i];
+   cout << endl;
+   if (c==1)
+   {
+       cout << "Operation: Jam +\n";
+   }
+   else if (c==2)
+   {
+       cout << "Operation: Tafrigh -\n";
+   }
+   else if (c==3)
+   {
+       cout << "Operation: Zarb x\n";
+   }
+   else if (c==4)
+   {
+       cout << "Operation: Taghsim /\n";
+   }
+   else if (c==5)
+   {
+       cout << "Operation: Tavan ^\n";
+   }
+   else if (c==6)
+   {
+       cout << "Operation: Jazr ~\n";
+   }
    if(c!=6)
    {
-       cout << "#Please enter your second number : \n\n";
+       cout << "\n\n#Please enter your second number : \n\n";
        nb = set_array(b);
        system("cls");
    }
