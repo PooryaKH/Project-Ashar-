@@ -33,47 +33,6 @@ void rzero(short int *a)
     }
 
 }
-void nzero(short int *a,int k)
-{
-    int na = a[0];
-    cout << "^:" << k<<endl;
-    for(int i=1;i<=k;i++)
-    {
-        if (a[1] == 0)
-                a[0]--;
-
-        for(int j=1; j<na; j++)
-        {
-            if (a[j]!=0)
-            {
-                break;
-            }
-            else
-            {
-                swap(a[j],a[j+1]);
-            }
-        }
-    }
-    if (a[0] < 1)
-    {
-        a[0] = 1;
-        a[1] = 0;
-    }
-
-}
-int zeroes(short int *a)
-{
-    int na=0;
-    for(int i=1;i<=a[0];i++)
-    {
-        if (a[i] != 0)
-            break;
-
-        na++;
-    }
-    return na;
-
-}
 void addzero(short int *a)
 {
     a[a[0]+1] = 0;
@@ -85,7 +44,7 @@ int get_operation()
     while (1)
     {
         c = getch();
-        if (c>'0' && c<'7')
+        if (c>'0' && c<'8')
             break;
         if (c == '+')
         {
@@ -110,6 +69,11 @@ int get_operation()
         if (c == '^')
         {
             c = '5';
+            break;
+        }
+        if (c == '%')
+        {
+            c = '7';
             break;
         }
     }
@@ -578,7 +542,11 @@ void jam(short int *a, int na, short int *b, int nb)
         c = jam_sub(a,na,b,nb);
     }
     for (int i=1 ; i<=c[0] ; i++)
+    {
+        if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+            cout << ",";
         cout << c[i];
+    }
 }
 void tafrigh(short int *a, int na, short int *b, int nb)
 {
@@ -615,7 +583,11 @@ void tafrigh(short int *a, int na, short int *b, int nb)
         c = tafrigh_sub(b,nb,a,na);
     }
     for (int i=1 ; i<=c[0] ; i++)
+    {
+        if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+            cout << ",";
         cout << c[i];
+    }
 }
 int zarb(short int *a, int na, short int *b, int nb)
 {
@@ -628,13 +600,17 @@ int zarb(short int *a, int na, short int *b, int nb)
         cout << "-";
     }
     for (int i=1 ; i<=c[0] ; i++)
+    {
+        if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+            cout << ",";
         cout << c[i];
+    }
 }
 void taghsim(short int *a, int na, short int *b, int nb)
 {
     short int *c;
     c = new short int [maxadad];
-    if (nb == 1 && b[1] ==1)
+    if (nb == 1 && b[1] ==0)
     {
         cout << "Error!";
     }
@@ -648,7 +624,11 @@ void taghsim(short int *a, int na, short int *b, int nb)
             }
             c = taghsim_sub(a,na,b,nb);
             for (int i=1 ; i<=c[0] ; i++)
+            {
+                if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+                    cout << ",";
                 cout << c[i];
+            }
         }
         else
         {
@@ -679,7 +659,11 @@ void tavan(short int *a, int na, short int *b, int nb)
 
             c = tavan_sub(a,na,b,nb);
             for (int i=1 ; i<=c[0] ; i++)
-            cout << c[i];
+            {
+                if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+                    cout << ",";
+                cout << c[i];
+            }
         }
 
     }
@@ -706,10 +690,42 @@ void jazr(short int *a, int na)
         else
         {
             b = jazr_sub(a,na);
-            for (int i = 1; i<= b[0] ; i++)
+            for (int i=1 ; i<=b[0] ; i++)
+            {
+                if (((b[0]-i+1)%3 == 0) && (i!=b[0]) && (i!=1))
+                    cout << ",";
                 cout << b[i];
+            }
         }
     }
+}
+void baghi(short int *a, int na, short int *b, int nb)
+{
+    short int *c;
+    c = new short int [maxadad];
+    if ((a[0]== -3) || (b[0] == -3))
+    {
+        cout << "Error!";
+    }
+    else if ((nb == 1) && (b[1] == 0))
+    {
+        cout << "Error!";
+    }
+    else
+    {
+        a[0] = na;
+        b[0] = nb;
+        c = taghsim_sub(a,a[0],b,b[0]);
+        c = zarb_sub(c,c[0],b,b[0]);
+        c = tafrigh_sub(a,a[0],c,c[0]);
+        for (int i=1 ; i<=c[0] ; i++)
+        {
+            if (((c[0]-i+1)%3 == 0) && (i!=c[0]) && (i!=1))
+                cout << ",";
+            cout << c[i];
+        }
+    }
+
 }
 int main()
 {
@@ -721,7 +737,7 @@ int main()
    na = set_array(a);
    system("cls");
 
-   cout << "\n\n*Please , Select your desired operation:\n\n1.+    2.-    3.x    4./    5.^    6.Jazr\n\nTYPE: ";
+   cout << "\n\n*Please , Select your desired operation:\n\n1.+    2.-    3.x    4./    5.^    6.Jazr    ***7.Baghi mande %\n\nTYPE: ";
    c = get_operation() - '0';
    system("cls");
    cout << "1. ";
@@ -754,6 +770,10 @@ int main()
    {
        cout << "Operation: Jazr ~\n";
    }
+   else if (c==7)
+   {
+       cout << "Operation: Baghi mande %\n";
+   }
    if(c!=6)
    {
        cout << "\n\n#Please enter your second number : \n\n";
@@ -778,33 +798,38 @@ int main()
    cout << endl << endl;
    if (c==1)
    {
-       cout << "Operation: Jam +\n";
+       cout << "Operation: Jam +\n ";
        jam(a,na,b,nb);
    }
    else if (c==2)
    {
-       cout << "Operation: Tafrigh -\n";
+       cout << "Operation: Tafrigh -\n ";
        tafrigh(a,na,b,nb);
    }
    else if (c==3)
    {
-       cout << "Operation: Zarb x\n";
+       cout << "Operation: Zarb x\n ";
        zarb(a,na,b,nb);
    }
    else if (c==4)
    {
-       cout << "Operation: Taghsim /\n";
+       cout << "Operation: Taghsim /\n ";
        taghsim(a,na,b,nb);
    }
    else if (c==5)
    {
-       cout << "Operation: Tavan ^\n";
+       cout << "Operation: Tavan ^\n ";
        tavan(a,na,b,nb);
    }
    else if (c==6)
    {
-       cout << "Operation: Jazr ~\n";
+       cout << "Operation: Jazr ~\n ";
        jazr(a,na);
+   }
+   else if (c==7)
+   {
+       cout << "Operation: Baghi mande %\n ";
+       baghi(a,na,b,nb);
    }
     return 0;
 }
